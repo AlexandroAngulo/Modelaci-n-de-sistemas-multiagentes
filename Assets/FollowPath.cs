@@ -8,49 +8,35 @@ public class FollowPath : MonoBehaviour
 
     //Input Parameters
     [SerializeField]
-    GameObject path;
+    public Transform path;
     [SerializeField]
     float linear_vel;
     
     [SerializeField]
     float rotational_vel;
-    [SerializeField]
-    float min_distance_to_change_of_objective;
-    [SerializeField]
-    float wait_seconds;
 
-    //Control variables
-    private Coroutine coroutine_ofchange;
     
-    void Awake(){
+    void Start(){
         
-        path.transform.position = new Vector3(path.transform.position.x, transform.position.y, path.transform.position.z);
+        path.position = new Vector3(path.position.x, transform.position.y, path.position.z);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if((path.transform.position - transform.position).magnitude > min_distance_to_change_of_objective ){
+        if((transform.position- path.position).magnitude > 1)
+        {
             moveTowardsObjective();
-        }else{
-            if(coroutine_ofchange == null)
-            {
-                coroutine_ofchange = StartCoroutine(Change_Objective());
-            }
-            if(path.name == "END" || path.transform.childCount == 0)
-            {
-                StopAllCoroutines();
-                Destroy(gameObject);
-            }
         }
         
 
     }
     void moveTowardsObjective(){
-        Quaternion relative_rotation = Quaternion.LookRotation(path.transform.position - transform.position);
+        Quaternion relative_rotation = Quaternion.LookRotation(path.position - transform.position);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, relative_rotation, rotational_vel* Time.deltaTime);
-        transform.position += transform.forward * Time.deltaTime * linear_vel;
+        transform.position += transform.forward * Time.deltaTime * linear_vel ;
     }
+    /*
     public IEnumerator Change_Objective(){
         //Wait for a simple wait
         
@@ -60,7 +46,7 @@ public class FollowPath : MonoBehaviour
         List<KeyValuePair<float,GameObject>> adyacencies = new List<KeyValuePair<float, GameObject>>() ;
         //Create the sum of all posibilities
         float Big_posibility = 0;
-        foreach (Transform child in path.transform){
+        foreach (Transform child in path){
             //if no posibility by default set it to 1
             float posibility = child.gameObject.GetComponent<Data>()?.probability() ?? 1;
             Debug.Log(posibility);
@@ -82,5 +68,5 @@ public class FollowPath : MonoBehaviour
         path = adyacencies[selected_index_path].Value;
         Debug.Log(path.name);
         coroutine_ofchange = null;
-    }
+    }*/
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class show_position : MonoBehaviour
 {
-    void OnDrawGizmosSelected()
+    void OnDrawGizmos()
     {
         Gizmos.color = new Color(0.75f, 0.0f, 0.0f, 0.75f);
 
